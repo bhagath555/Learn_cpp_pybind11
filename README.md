@@ -11,24 +11,24 @@ This repository containing a simple C++ code that convderted into importable pyt
 * use_pybind.py
     * Import and usage of pybind-exported cpp code.
 
-### SYSTEM setup:
-* Firstly, I have installed pybind11 package from MSYS/MinGW by executing below command.
-* Command:- `pacman -S mingw-w64-x86_64-pybind11`
+## SYSTEM setup:
+* I have used this [system setup](https://github.com/bhagath555/learn-cpp-gtest#setting-up) for CPP project development in windows 10 OS, Using MSYS MinGW as a package manager. Visit the [system setup](https://github.com/bhagath555/learn-cpp-gtest#setting-up) page for the detailed explanation. 
+* With the C/C++ development environment ready, firstly, It is important to install pybind11 package from MSYS/MinGW by executing below command in MSYS.
+	
+		pacman -S mingw-w64-x86_64-pybind11
 
 
-### Project building:
-Then download/clone the repository, and remove `build` folder.
-
-**NOTE: .vscode/c_cpp_properties.json is a VS Code setup file.**
-
-Try to build the project. If it works fine, try running `example.py` to test the developed module. Unlike proper building, if the build was not successful and return error something related like below. 
+## Project building:
+Then download/clone the repository and remove `build` folder. Try to build the project. If it works fine, try running `example.py` to test the developed module. Unlike proper building, if the build was not successful and return error something related like below. 
 
 * ` C:/mingw64/lib/gcc/x86_64-w64-mingw32/6.3.0/include/c++/cmath:1157:11: error: '::hypot' has not been declared\r`.
 
 * In changed `1157:11` line in `C:/mingw64/lib/gcc/x86_64-w64-mingw32/6.3.0/include/c++/cmath`. 
     * `using ::hypot;` to `using ::_hypot;`.
-* This solution was suggested in link - https://stackoverflow.com/questions/42276984/hypot-has-not-been-declared.
+* This solution was suggested in [StackOverflow](https://stackoverflow.com/questions/42276984/hypot-has-not-been-declared).
 
 Above solution fixes last error you could encounter if you have followed all the steps I mentioned correctly.
 
-Now, try to build again. after successful building, RUN examply.py from VSCode.
+Now, try to build again. after successful building, RUN examply.py from VSCode. The detailed explanation of pybind usage is provided at [pybind11 readthedocs](https://pybind11.readthedocs.io/en/stable/basics.html#creating-bindings-for-a-simple-function). 
+
+Bhagath Mamidlapelly.

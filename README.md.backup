@@ -2,84 +2,33 @@
 
 This repository containing a simple C++ code that convderted into importable python module via pybind11 and CMake. In order to mimic standard CPP project workflow setup, divided the entire code into one header, code, and binding file.
 
-* cpp_headers.hpp
+* header.hpp
     * Function definations and library includions.
-* cpp_code.cpp
+* code.cpp
     * Implenentation of function definations added in cpp_headers.hpp
 * binder.cpp
     * Actual code the binds the cpp code with python.
+* use_pybind.py
+    * Import and usage of pybind-exported cpp code.
 
-### VSCode setup:
-* Firstly, I have installed pybind11 package from MSYS/MinGW by following below link.
-* Link:- `pacman -S mingw-w64-x86_64-pybind11`
+## SYSTEM setup:
+* I have used this [system setup](https://github.com/bhagath555/learn-cpp-gtest#readme) for CPP project development in windows 10 OS, Using MSYS MinGW as a package manager. Visit the [system setup](https://github.com/bhagath555/learn-cpp-gtest#readme) page for the detailed explanation. 
+* With the C/C++ development environment ready, firstly, It is important to install pybind11 package from MSYS/MinGW by executing below command in MSYS.
+	
+		pacman -S mingw-w64-x86_64-pybind11
 
-Populated below files. NOTE: .vscode/c_cpp_properties.json is a VS Code setup.
 
-Folder Structure:
-* .vscode/
-    * c_cpp_properties.json
-* CMakeLists.txt
-* example.py
-* example.cpp
+## Project building:
+Then download/clone the repository and remove `build` folder. Try to build the project. If it works fine, try running `example.py` to test the developed module. Unlike proper building, if the build was not successful and return error something related like below. 
 
-## example.cpp
-``` cpp
-    #include<pybind11/pybind11.h> // By default this line indicates error.
-    // Fix for above error explained below.
-    #include<iostream>
+* ` C:/mingw64/lib/gcc/x86_64-w64-mingw32/6.3.0/include/c++/cmath:1157:11: error: '::hypot' has not been declared\r`.
 
-    int py_add(int i, int j) {
-        std::cout << "CPP modules is being run from python via pybind11\n";
-        return i+j;
-    }
+* In changed `1157:11` line in `C:/mingw64/lib/gcc/x86_64-w64-mingw32/6.3.0/include/c++/cmath`. 
+    * `using ::hypot;` to `using ::_hypot;`.
+* This solution was suggested in [StackOverflow](https://stackoverflow.com/questions/42276984/hypot-has-not-been-declared).
 
-    PYBIND11_MODULE(example, m) {
-        m.def("py_add", &py_add, "A function which adds two numbers");
-    }
-```
+Above solution fixes last error you could encounter if you have followed all the steps I mentioned correctly.
 
-To avoid above code, press ctrl+shift+P -> add "C:/msys64/mingw64/include/python3.10" path to include path.
+Now, try to build again. after successful building, RUN examply.py from VSCode. The detailed explanation of pybind usage is provided at [pybind11 readthedocs](https://pybind11.readthedocs.io/en/stable/basics.html#creating-bindings-for-a-simple-function). 
 
-## CMakeLists.txt
-``` C
-cmake_minimum_required(VERSION 3.23)
-project(example)
-
-set(pybind11_DIR $CACHE{pybind11_DIR})
-# This directory will be the final dir
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ..)
-
-find_package(pybind11 REQUIRED)
-# include_directories(pybind11)
-pybind11_add_module(example example.cpp)
-
-```
-
-## example.py
-In this file, we have used the pybind exported module.
-``` python
-import example
-
-def main():
-    i, j = 3, 2
-    res = example.py_add(i,j)
-    print("%d + %d = %d" % (i, j, res))
-
-if __name__ == '__main__':
-    main()
-```
-
-Try to build the project. If it works fine, Enjoy your learning. Unlike proper building, if the build was not successful and return error something related like below. 
-    ` C:/mingw64/lib/gcc/x86_64-w64-mingw32/6.3.0/include/c++/cmath:1157:11: error: '::hypot' has not been declared\r `
-
-I changed `1157:11` line in `C:/mingw64/lib/gcc/x86_64-w64-mingw32/6.3.0/include/c++/cmath`. 
-    `using ::hypot;` to `using ::_hypot;`.
-This solution was suggested in link - https://stackoverflow.com/questions/42276984/hypot-has-not-been-declared.
-
-Above solution fixes last error you could encounter if you follow all the steps I mentioned.
-
-Now, try running the build. It will give a satisfactory build.
-
-RUN examply.py from VSCode, It'll run perfectly fine.
-
-See you... Bye...
+Bhagath Mamidlapelly.
